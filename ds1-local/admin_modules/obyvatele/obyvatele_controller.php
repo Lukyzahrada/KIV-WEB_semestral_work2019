@@ -179,7 +179,7 @@ class obyvatele_controller extends ds1_base_controller
             }
 
             // zobrazit aktualni stav
-            $action = "obyvatel_na_pokoje_add_prepare";
+            $action = "obyvatele_list_all";
         }
 
         if ($action == "obyvatel_na_pokoje_delete_go") {
@@ -324,6 +324,20 @@ class obyvatele_controller extends ds1_base_controller
             $content_params["obyvatele_total"] = $total;
             //$content_params["search_params"] = $search_params;
             $content_params["obyvatele_list"] = $obyvatele_list;
+            $pokoje_start = new pokoje($this->ds1->GetPDOConnection());
+            $pokoje = $pokoje_start->adminLoadItems("data", 1, -1);
+            $pokoje_occupacy = array();
+            foreach  ($pokoje as $pokoj) {
+                $id_pokoj = $pokoj['id'];
+                $pokoje_occupacy[$id_pokoj] = 0;
+            }
+            foreach ($obyvatele_list as $obyvatel_item) {
+                $obyvatel_pokoj = $obyvatel_item['pokoj'];
+                if ($obyvatel_pokoj != false) {
+                    $id_pokoje = $obyvatel_pokoj['id'];
+                    $pokoje_occupacy[$id_pokoje] = $pokoje_occupacy[$id_pokoje] + 1;
+                }
+            }
             $content_params["pagination_html"] = $pagination_html;
 
             // url pro vytvoreni obyvatele
@@ -343,6 +357,15 @@ class obyvatele_controller extends ds1_base_controller
             $content_params["form_submit_url"] = $this->makeUrlByRoute($this->route);
             $content_params["form_action_insert_obyvatel"] = "obyvatel_add_go";
             $content_params["form_action_update_obyvatel"] = "obyvatel_update_go";
+            $content_params["form_action"] = "obyvatel_na_pokoje_add_go";
+            $pokoje_list_final = array();
+            foreach  ($pokoje as $pokoj) {
+                $id_pok = $pokoj['id'];
+                if ($pokoj['kapacita_osob'] > $pokoje_occupacy["$id_pok"]) {
+                    array_push($pokoje_list_final, $pokoj);
+                }
+            }
+            $content_params["pokoje_list"] = $pokoje_list_final;
 
             $content = $this->renderPhp(DS1_DIR_ADMIN_MODULES_FROM_ADMIN . "obyvatele/templates/admin_obyvatele_list.inc.php", $content_params, true);
         }

@@ -34,6 +34,8 @@
                             <th>Zkratka pojištovny</th>
                             <th>OP platnost DO</th>
                             <th>Upravit</th>
+                            <th>Detail</th>
+                            <th>Ubytování</th>
 <!--                            <th>Last Name</th>-->
 <!--                            <th>Edit</th>-->
 <!--                            <th>Delete</th>-->
@@ -47,7 +49,9 @@
                             <td>{{name.datum_narozeni}}</td>
                             <td>{{name.pojistovna_zkratka}}</td>
                             <td>{{name.op_platnost_do}}</td>
-                            <td><button type="button" ng-click="fetchSingleData(name.id)" class="btn btn-warning btn-xs">Edit</button></td>//uprav fetch single data na modal
+                            <td><button type="button" ng-click="changeData(name.id)" class="btn btn-warning btn-xs">Upravit</button></td>//uprav fetch single data na modal
+                            <td><button type="button" ng-click="detail(name.id)" class="btn btn-warning btn-xs">Detail</button></td>
+                            <td><button type="button" ng-click="accomodate(name.id)" class="btn btn-warning btn-xs">Ubytovat</button></td>
 <!--                            <td>{{name.last_name}}</td>-->
 <!--                            -->
 <!--                            <td><button type="button" ng-click="deleteData(name.id)" class="btn btn-danger btn-xs">Delete</button></td>-->
@@ -284,6 +288,194 @@
 
                 </div><!-- konec row-->
 
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" tabindex="-1" role="dialog" id="crudmodal3">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Detail uživatele</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="row">
+
+                <!-- START DETAIL OBYVATELE PRO UPDATE -->
+                <div class="col-md-12">
+            <table class="table table-striped table-bordered">
+                <tbody>
+                    <tr>
+                        <th scope="col">Jméno</th>
+                        <td id="table_jmeno"></td>
+                        <th scope="col">Příjmení</th>
+                        <td id="table_prijmeni"></td>
+                    </tr>
+                    <tr>
+                        <th scope="col">Rodné příjmení</th>
+                        <td id="table_rodne_prijmeni"></td>
+                        <th scope="col">Datum narození</th>
+                        <td id="table_datum_narozeni"></td>
+                    </tr>
+                    <tr>
+                        <th scope="col">Tituly před</th>
+                        <td id="table_tituly_pred"></td>
+                        <th scope="col">Tituly za</th>
+                        <td id="table_tituly_za"></td>
+                    </tr>
+                    <tr>
+                        <th scope="col">Rodné číslo</th>
+                        <td id="table_rodne_cislo"></td>
+                        <th scope="col">Místo narození</th>
+                        <td id="table_misto_narozeni"></td>
+                    </tr>
+                    <tr>
+                        <th scope="col">Pojišťovna zkratka</th>
+                        <td id="table_pojistovna_zkratka"></td>
+                        <th scope="col">Číslo pojištěnce</th>
+                        <td id="table_cislo_pojistence"></td>
+                    </tr>
+                    <tr>
+                        <th scope="col">Ulice</th>
+                        <td id="table_adresa_ulice"></td>
+                        <th scope="col">ČP</th>
+                        <td id="table_adresa_cp"></td>
+                    </tr>
+                    <tr>
+                        <th scope="col">Město</th>
+                        <td id="table_adresa_mesto"></td>
+                        <th scope="col">Občanský průkaz</th>
+                        <td id="table_op"></td>
+                    </tr>
+                    <tr>
+                        <th scope="col">Platnost OP</th>
+                        <td id="table_op_platnost_do"></td>
+                        <th scope="col">Kontaktní osoba jméno</th>
+                        <td id="table_kontaktni_osoba_jmeno"></td>
+                    </tr>
+                    <tr>
+                        <th scope="col">Kontaktní osoba příjmení</th>
+                        <td id="table_kontaktni_osoba_prijmeni"></td>
+                        <th scope="col">Kontaktní osoba číslo</th>
+                        <td id="table_kontaktni_osoba_cislo"></td>
+                    </tr>
+                </tbody>
+            </table>
+                    <div id="ubytovani">
+                    <div class="modal-header">
+                    <h3>Ubytování</h3>
+                    </div>
+                        <table class="table table-striped table-bordered">
+                            <tbody>
+                            <tr>
+                                <th scope="col">Název pokoje</th>
+                                <td id="table_pokoj_nazev"></td>
+                                <th scope="col">Popis pokoje</th>
+                                <td id="table_pokoj_popis"></td>
+                            </tr>
+                            <tr>
+                                <th scope="col">Poschodí</th>
+                                <td id="table_pokoj_poschodi"></td>
+                                <th scope="col">Sociální zařízení</th>
+                                <td id="table_pokoj_socialni_zarizeni"></td>
+                            </tr>
+                            <tr>
+                                <th scope="col">Datum od</th>
+                                <td id="table_pokoj_datum_od"></td>
+                                <th scope="col">Datum do</th>
+                                <td id="table_pokoj_datum_do"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="ubytovani_none">
+                        <div class="modal-header">
+                            Tento obyvatel není umístěn na žádném pokoji
+                        </div>
+                    </div>
+        </div>
+    </div>
+</div>
+    </div>
+</div>
+<div class="modal fade" tabindex="-1" role="dialog" id="crudmodal4">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <form method="post" action="<?php echo $form_submit_url; ?>">
+                <input type="hidden" id="hidden1" name="obyvatel_id" value=""/>
+                <input type="hidden" id="hidden2" name="obyvatel[obyvatel_id]" value=""/>
+                <input type="hidden" name="action" value="<?php echo $form_action; ?>"/>
+
+                <div class="row">
+
+                    <!-- START DETAIL OBYVATELE PRO UPDATE -->
+                    <div class="col-md-12">
+
+                        <div class="card">
+                            <div class="card-header">
+                                Přidat obyvatele na pokoj
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+
+                                    <table class='table table-striped table-bordered'>
+                                        <tr>
+                                            <th class='w-25'>Datum OD</th>
+                                            <td class='w-75'>
+                                                <input type="date" class="form-control" name="obyvatel[datum_od]" required />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th class='w-25'>Datum DO</th>
+                                            <td class='w-75'>
+                                                <input type="date" class="form-control" name="obyvatel[datum_do]"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th class='w-25'>Pokoj</th>
+                                            <td class='w-75'>
+                                                <?php
+                                                // printr($pokoje_list);
+
+                                                if ($pokoje_list != null) {
+                                                    echo "<select name=\"obyvatel[pokoj_id]\" required>";
+
+                                                    foreach ($pokoje_list as $pokoj_item) {
+                                                        echo "<option value=\"$pokoj_item[id]\">$pokoj_item[nazev] (poschodi: $pokoj_item[poschodi], kapacita: $pokoj_item[kapacita_osob] osob)</option>";
+                                                    }
+
+                                                    echo "</select>";
+                                                }
+                                                else {
+                                                    echo "Chyba: pokoje nejsou k dispozici";
+                                                }
+                                                ?>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="pull-left">
+
+                                            <input type="submit" class="btn btn-primary btn-lg" value="Přidat obyvatele na pokoj" />
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div><!-- card -->
+
+                    </div> <!--col-md-12-->
+
+
+                </div><!-- konec row-->
             </form>
         </div>
     </div>
