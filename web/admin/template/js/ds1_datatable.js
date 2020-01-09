@@ -1,5 +1,5 @@
 var app = angular.module('ds1', ['datatables']);
-app.controller('crudController', function($scope, $http){
+app.controller('tableController', function($scope, $http){
 
     $scope.success = false;
 
@@ -7,46 +7,45 @@ app.controller('crudController', function($scope, $http){
 
     $scope.fetchData = function(){
         $scope.namesData = JSON.parse(document.getElementById('obyvatele_list').getAttribute("value"));
-        console.log(document.getElementById('obyvatele_list').getAttribute("value"));
     };
 
     $scope.openModal = function(){
-        var modal_popup = angular.element('#crudmodal');
+        var modal_popup = angular.element('#modal');
         modal_popup.modal('show');
     };
 
     $scope.openModal2 = function(){
-        var modal_popup = angular.element('#crudmodal2');
+        var modal_popup = angular.element('#modal2');
         modal_popup.modal('show');
     };
 
     $scope.openModal3 = function(){
-        var modal_popup = angular.element('#crudmodal3');
+        var modal_popup = angular.element('#modal3');
         modal_popup.modal('show');
     };
 
     $scope.openModal4 = function(){
-        var modal_popup = angular.element('#crudmodal4');
+        var modal_popup = angular.element('#modal4');
         modal_popup.modal('show');
     };
 
     $scope.closeModal4 = function(){
-        var modal_popup = angular.element('#crudmodal4');
+        var modal_popup = angular.element('#modal4');
         modal_popup.modal('hide');
     };
 
     $scope.closeModal3 = function(){
-        var modal_popup = angular.element('#crudmodal3');
+        var modal_popup = angular.element('#modal3');
         modal_popup.modal('hide');
     };
 
     $scope.closeModal = function(){
-        var modal_popup = angular.element('#crudmodal');
+        var modal_popup = angular.element('#modal');
         modal_popup.modal('hide');
     };
 
     $scope.closeModal2 = function(){
-        var modal_popup = angular.element('#crudmodal2');
+        var modal_popup = angular.element('#modal2');
         modal_popup.modal('hide');
     };
 
@@ -71,8 +70,8 @@ app.controller('crudController', function($scope, $http){
             document.getElementById("rodne_prijmeni").setAttribute("value", result[0].rodne_prijmeni);
         }
         if(result[0].datum_narozeni !== null) {
-
-            document.getElementById("datum_narozeni").setAttribute("value", new Date(result[0].datum_narozeni));
+            document.getElementById("datum_narozeni").setAttribute("required", "");
+            document.getElementById("datum_narozeni").setAttribute("value", result[0].datum_narozeni);
         }
         if(result[0].tituly_pred !== null) {
             document.getElementById("tituly_pred").setAttribute("value", result[0].tituly_pred);
@@ -203,22 +202,6 @@ app.controller('crudController', function($scope, $http){
             document.getElementById("ubytovani_none").removeAttribute("hidden");
         }
         $scope.openModal3();
-    };
-
-    $scope.deleteData = function(id){
-        if(confirm("Are you sure you want to remove it?"))
-        {
-            $http({
-                method:"POST",
-                url:"insert.php",
-                data:{'id':id, 'action':'Delete'}
-            }).success(function(data){
-                $scope.success = true;
-                $scope.error = false;
-                $scope.successMessage = data.message;
-                $scope.fetchData();
-            });
-        }
     };
 
 });
