@@ -111,6 +111,7 @@ app.controller('tableController', function($scope, $http){
             document.getElementById("op_platnost_do").setAttribute("value", null);
         }
         if(result[0].kontaktni_osoba_jmeno !== null) {
+
             document.getElementById("kontaktni_osoba_jmeno").setAttribute("value", result[0].kontaktni_osoba_jmeno);
         }
         if(result[0].kontaktni_osoba_prijmeni !== null) {
@@ -134,6 +135,7 @@ app.controller('tableController', function($scope, $http){
         var result = $scope.namesData.filter(name => {
             return name.id === id;
         });
+        console.log(result[0]);
         if(result[0].jmeno !== null){
             document.getElementById("table_jmeno").innerHTML = result[0].jmeno;
         }
@@ -180,7 +182,7 @@ app.controller('tableController', function($scope, $http){
             document.getElementById("table_op_platnost_do").innerHTML = result[0].op_platnost_do;
         }
         if(result[0].kontaktni_osoba_jmeno !== null) {
-            document.getElementById("table_kontaktni_osoba_jmeno").sinnerHTML = result[0].kontaktni_osoba_jmeno;
+            document.getElementById("table_kontaktni_osoba_jmeno").innerHTML = result[0].kontaktni_osoba_jmeno;
         }
         if(result[0].kontaktni_osoba_prijmeni !== null) {
             document.getElementById("table_kontaktni_osoba_prijmeni").innerHTML = result[0].kontaktni_osoba_prijmeni;
