@@ -64,6 +64,14 @@
                            value='<?php $obyvatele_json = json_encode($obyvatele_list);
                            echo $obyvatele_json ?>'>
 
+                    <input hidden type="text" id="ubytovani_all"
+                           value='<?php $ubytovani_all_json = json_encode($ubytovani_all);
+                           echo $ubytovani_all_json ?>'>
+
+                    <input hidden type="text" id="pokoje_all"
+                           value='<?php $pokoje_all_json = json_encode($pokoje_list);
+                           echo $pokoje_all_json ?>'>
+
                 </div>
 
 
@@ -433,14 +441,14 @@
                                         <tr>
                                             <th class='w-25'>Datum OD</th>
                                             <td class='w-75'>
-                                                <input type="date" class="form-control" name="obyvatel[datum_od]"
+                                                <input type="date" class="form-control" id="dateStart" onchange="disableRoomSelect()" name="obyvatel[datum_od]"
                                                        required/>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th class='w-25'>Datum DO</th>
                                             <td class='w-75'>
-                                                <input type="date" class="form-control" name="obyvatel[datum_do]"/>
+                                                <input type="date" class="form-control" id="dateEnd" onchange="disableRoomSelect()" name="obyvatel[datum_do]"/>
                                             </td>
                                         </tr>
                                         <tr>
@@ -450,13 +458,21 @@
                                                 // printr($pokoje_list);
 
                                                 if ($pokoje_list != null) {
-                                                    echo "<select name=\"obyvatel[pokoj_id]\" required>";
+                                                    echo "<div class='input-group'>";
 
-                                                    foreach ($pokoje_list as $pokoj_item) {
-                                                        echo "<option value=\"$pokoj_item[id]\">$pokoj_item[nazev] (poschodi: $pokoj_item[poschodi], kapacita: $pokoj_item[kapacita_osob] osob)</option>";
-                                                    }
+                                                        echo "<select disabled name=\"obyvatel[pokoj_id]\" class=\"custom-select\" id=\"roomSelect\" required>";
 
-                                                    echo "</select>";
+                                                            echo "<option disabled selected value> -- Vyberte pokoj -- </option>";
+
+                                                        foreach ($pokoje_list as $pokoj_item) {
+                                                            echo "<option id='$pokoj_item[id]' value=\"$pokoj_item[id]\">$pokoj_item[nazev] (poschodi: $pokoj_item[poschodi], kapacita: $pokoj_item[kapacita_osob] osob)</option>";
+                                                        }
+
+                                                        echo "</select>";
+                                                        echo "<div class='input-group-append'>";
+                                                            echo "<button type='button' class='btn btn-primary btn-xs' onClick='selectRoom()'>Vybrat pokoj</button>";
+                                                        echo "</div>";
+                                                    echo "</div>";
                                                 } else {
                                                     echo "Chyba: pokoje nejsou k dispozici";
                                                 }
@@ -468,6 +484,7 @@
                                 </div>
 
                                 <div class="row">
+                                    <div style="color: red" id="roomError" hidden></div>
                                     <div class="col-md-12">
                                         <div class="pull-left">
 

@@ -206,4 +206,65 @@ app.controller('tableController', function($scope, $http){
         $scope.openModal3();
     };
 
+
+
 });
+
+
+selectRoom = function () {
+    var errorMessageElement = document.getElementById("roomError");
+
+    var rooms = JSON.parse(document.getElementById("pokoje_all").getAttribute("value"));
+    var data = JSON.parse(document.getElementById("ubytovani_all").getAttribute("value"));
+
+    var dateStart = document.getElementById("dateStart").value;
+    var dateEnd = document.getElementById("dateEnd").value;
+
+    var dateStartTime = new Date(dateStart).getTime();
+    var dateEndTime = new Date(dateEnd).getTime();
+
+    if (dateStart === "" || dateEnd === "") {
+        errorMessageElement.innerHTML = "Vyberte prosím oba datumy!";
+        errorMessageElement.removeAttribute("hidden");
+        return
+    } else if(dateStartTime>dateEndTime) {
+        errorMessageElement.innerHTML = "Datum OD nemůže být déle než Datum DO!";
+        errorMessageElement.removeAttribute("hidden");
+        return
+    } else {
+        rooms.forEach(function (room) {
+            let capacity = room.kapacita_osob;
+            let habitants = 0;
+            console.log(capacity);
+            for (let log of data) {
+                if (log.pokoj_id === room.id) {
+                    let start = new Date(log.datum_od.substring(0, 10)).getTime();
+                    let end = new Date(log.datum_do.substring(0, 10)).getTime();
+                    if (start>=dateStartTime && start<=dateEndTime && end>=dateStartTime) {
+                        habitants++;
+                        if (habitants>=capacity){
+                            let room_id = room.id;
+                            document.getElementById(room_id).setAttribute("disabled", "");
+                            document.getElementById(room_id).setAttribute("style", "color: red");
+                            console.log("disabled " + room_id);
+                            break;
+                        }
+                    }
+                }
+            }
+        })
+    }
+    document.getElementById("roomSelect").removeAttribute("disabled");
+};
+
+disableRoomSelect = function () {
+    document.getElementById("roomSelect").setAttribute("disabled", "");
+    document.getElementById("roomError").setAttribute("hidden", "");
+    var rooms = JSON.parse(document.getElementById("pokoje_all").getAttribute("value"));
+    rooms.forEach(function (room) {
+        var id = room.id;
+        document.getElementById(id).removeAttribute("style");
+        document.getElementById(id).removeAttribute("disabled");
+    })
+};
+

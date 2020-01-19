@@ -301,6 +301,7 @@ class obyvatele_controller extends ds1_base_controller
             //echo "total: $total"; exit;
 
             $obyvatele_list = $obyvatele->adminLoadItems("data", $this->page_number, $count_on_page, $where_array, "prijmeni", "asc");
+            $ubytovani_all = $obyvatele->adminLoadAllUbytovaniObyvatelu(-1);
         }
 
         // vlastni controller pro list nebo search
@@ -324,6 +325,7 @@ class obyvatele_controller extends ds1_base_controller
             $content_params["obyvatele_total"] = $total;
             //$content_params["search_params"] = $search_params;
             $content_params["obyvatele_list"] = $obyvatele_list;
+            $content_params["ubytovani_all"] = $ubytovani_all;
             $pokoje_start = new pokoje($this->ds1->GetPDOConnection());
             $pokoje = $pokoje_start->adminLoadItems("data", 1, -1);
             $pokoje_occupacy = array();
@@ -365,7 +367,8 @@ class obyvatele_controller extends ds1_base_controller
                     array_push($pokoje_list_final, $pokoj);
                 }
             }
-            $content_params["pokoje_list"] = $pokoje_list_final;
+            //$content_params["pokoje_list"] = $pokoje_list_final;
+            $content_params["pokoje_list"] = $pokoje;
 
             $content = $this->renderPhp(DS1_DIR_ADMIN_MODULES_FROM_ADMIN . "obyvatele/templates/admin_obyvatele_list.inc.php", $content_params, true);
         }
